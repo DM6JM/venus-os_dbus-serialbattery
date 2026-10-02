@@ -958,6 +958,9 @@ def open_serial_port(port: str, baud: int) -> Union[serial.Serial, None]:
     tries = 3
     while tries > 0:
         try:
+            ret = serial.Serial(port, baudrate=baud, timeout=0.1)
+            if ret is not None:
+                ret.low_latency = True  # Avoid problems with FTDI SIO driver lateny settings and large banks 
             return serial.Serial(port, baudrate=baud, timeout=0.1)
         except serial.SerialException as e:
             logger.error(e)
